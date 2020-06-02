@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
@@ -15,35 +14,23 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.BooleanClause.Occur;
 
+/**
+ * Functions to help building lucene queries.
+ */
 public class QueryCreator {
 	
 	private Analyzer analyzer;
-	private HashMap<String,Float> searchFields = new HashMap<>();
-	
-	public QueryCreator(HashMap<String,Float> searchFields)
+		
+	public QueryCreator(Analyzer inputAnalyzer)
 	{
-		CharArraySet stopwords = Utils.loadStopwords(Utils.paramsMap.get("stopwordDir"));
-		analyzer = new EnglishKrovetzAnalyzer(stopwords);
-		this.searchFields = searchFields;
+		analyzer = inputAnalyzer;
 	}
-	
-	public QueryCreator()
-	{
-		CharArraySet stopwords = Utils.loadStopwords(Utils.paramsMap.get("stopwordDir"));
-		analyzer = new EnglishKrovetzAnalyzer(stopwords);
-	}
-	
-	public static Query buildIdQuery(String id, String idField)
-	{
-		BooleanQuery.Builder termQueryBuilder = new BooleanQuery.Builder();		
-		Term t = new Term(idField, id);
-		BoostQuery boostQuery = new BoostQuery(new TermQuery(t), 1f);
-		BooleanClause booleanClause;
-		booleanClause = new BooleanClause(boostQuery, Occur.SHOULD);
-		termQueryBuilder.add(booleanClause);
-		return termQueryBuilder.build();
-	}
-	
+		
+	/**
+	 * Building a query over a set of fields with uniform field weights.
+	 * @param fieldValueMap		a map between field and the associated content (i.e., query term)
+	 * @return a Lucene query
+	 */
 	public Query buildFieldsQuery(HashMap<String,String> fieldValueMap)
 	{
 		BooleanQuery.Builder termQueryBuilder = new BooleanQuery.Builder();	
@@ -58,6 +45,12 @@ public class QueryCreator {
 		return termQueryBuilder.build();
 	}
 	
+	/**
+	 * Building a query using a set of term over a set of fields with field weights.
+	 * @param terms		the query keywords
+	 * @param fieldValueMap		a mapping between fields and their weights
+	 * @return a Lucene query
+	 */
 	public Query buildFieldsWeightedQuery(ArrayList<String> terms, HashMap<String,Double> fieldValueMap) throws IOException
 	{
 		ArrayList<String> analyzedTerms = analyzeTerms(terms);
@@ -78,52 +71,12 @@ public class QueryCreator {
 		}
 		return booleanQueryBuilder.build();
 	}
-	
-	public Query buildSingleFieldQuery(String text, String field) throws IOException
-	{
-		
-		ArrayList<String> analyzedTerms = analyzeText(text);
-		BooleanQuery.Builder termQueryBuilder = new BooleanQuery.Builder();
-		for(String term : analyzedTerms)
-		{
-			Term t = new Term(field, term);
-			BoostQuery boostQuery = new BoostQuery(new TermQuery(t), 1);
-			BooleanClause booleanClause;
-			booleanClause = new BooleanClause(boostQuery, Occur.SHOULD);
-			termQueryBuilder.add(booleanClause);		
-		}
-		return termQueryBuilder.build();
-	}
-	
-	public void setSearchFields(HashMap<String,Float> searchFields)
-	{
-		this.searchFields = searchFields;
-	}
-	
-	public Query create(ArrayList<String> terms, String operator) throws IOException
-	{
-		ArrayList<String> analyzedTerms = analyzeTerms(terms);
-		BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
-		for(String term : analyzedTerms)
-		{
-			BooleanQuery.Builder termQueryBuilder = new BooleanQuery.Builder();
-			for(String searchField : searchFields.keySet())
-			{
-				Term t = new Term(searchField, term);
-				BoostQuery boostQuery = new BoostQuery(new TermQuery(t), searchFields.get(searchField));
-				BooleanClause booleanClause;
-				booleanClause = new BooleanClause(boostQuery, Occur.SHOULD);
-				termQueryBuilder.add(booleanClause);
-				
-			}
-			if (operator.equals("or"))
-				booleanQueryBuilder.add(termQueryBuilder.build(), Occur.SHOULD);
-			else
-				booleanQueryBuilder.add(termQueryBuilder.build(), Occur.MUST);
-		}
-		return booleanQueryBuilder.build();
-	}
-	
+			
+	/**
+	 * Performing pre-processing (e.g., stopword removal and stemming) to query keywords.
+	 * @param terms		the query keywords
+	 * @return the processed terms
+	 */
 	public ArrayList<String> analyzeTerms(ArrayList<String> terms) throws IOException
 	{
 		ArrayList<String> analyzedTerms = new ArrayList<>();
@@ -144,40 +97,4 @@ public class QueryCreator {
 		}
 		return analyzedTerms;
 	}
-	
-	public ArrayList<String> analyzeText(String text) throws IOException
-	{
-		ArrayList<String> analyzedTerms = new ArrayList<>();
-
-		String analyzedTerm = null;
-		TokenStream tokenStream = analyzer.tokenStream("temp", text);
-		CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
-
-		tokenStream.reset();
-		while (tokenStream.incrementToken()) {
-		    analyzedTerm = charTermAttribute.toString();
-		    if(analyzedTerm != null)
-		    		analyzedTerms.add(analyzedTerm);
-		}
-		tokenStream.close();
-		return analyzedTerms;
-	}
-	
-	public String analyzeTextToText(String text) throws IOException
-	{
-		String output = "";
-		ArrayList<String> terms = analyzeText(text);
-		for(String t : terms)
-			output += t + " ";
-		return output.trim();
-	}
-	
-	public static void main(String[] args) throws IOException
-	{
-		QueryCreator creator = new QueryCreator(new HashMap<>());
-		String text = "what's up man? I'm good just went out with the dog";
-		System.out.println(creator.analyzeText(text));
-		
-	}
-
 }

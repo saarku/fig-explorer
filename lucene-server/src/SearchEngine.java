@@ -4,13 +4,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -21,55 +21,59 @@ import org.apache.lucene.search.similarities.LMJelinekMercerSimilarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+/**
+ * A search engine of figures which are represented using text data.
+ */
 public class SearchEngine {
 	
 	public IndexSearcher searcher;
 	public IndexReader reader;
 	public QueryCreator queryCreator;
-	public HashMap<String, Float> searchFields = new HashMap<>();
 
-	public SearchEngine(String indexDir, HashMap<String,Float> searchFields, String similarity) throws IOException
+	public SearchEngine(String indexDir, String similarityFunctionName) throws IOException
 	{
 		Path p = Paths.get(indexDir);
 		Directory indexDirectory = FSDirectory.open(p);
-		this.searchFields = searchFields;
 		reader = DirectoryReader.open(indexDirectory);
 		searcher = new IndexSearcher(reader);
 		
-		if (similarity.equals("BM25")) {
-			searcher.setSimilarity(new BM25Similarity());
-		} else if (similarity.equals("JM01")) {
-			searcher.setSimilarity(new LMJelinekMercerSimilarity(0.1f));
-		} else if (similarity.equals("DIR100")) {
-			searcher.setSimilarity(new LMDirichletSimilarity(100));
+		Analyzer analyzer;
+		if(Utils.searcherParamsMap.containsKey(Utils.STOPWORDS_CONFIG_PARAM)) {
+			CharArraySet stopwords = Utils.loadStopwords(Utils.searcherParamsMap.get(Utils.STOPWORDS_CONFIG_PARAM));
+			analyzer = new EnglishKrovetzAnalyzer(stopwords);
+		} else {
+			analyzer = new EnglishKrovetzAnalyzer();
 		}
-		queryCreator = new QueryCreator(searchFields);
+		queryCreator = new QueryCreator(analyzer);
+		
+		if (similarityFunctionName.equals(Utils.BM25_SIMILARITY)) {
+			searcher.setSimilarity(new BM25Similarity());
+		} else if (similarityFunctionName.equals(Utils.JELINEK_MERCER_SIMILARITY)) {
+			searcher.setSimilarity(new LMJelinekMercerSimilarity(Utils.JELINEK_MERCER_WEIGHT));
+		} else if (similarityFunctionName.equals(Utils.DIRICHLET_SIMILARITY)) {
+			searcher.setSimilarity(new LMDirichletSimilarity(Utils.DIRICHLET_MU));
+		}
 	}
 	
-	public SearchEngine(String indexDir) throws IOException
+	/**
+	 * A simple search over the collection using a Lucene query.
+	 * @param q		query in Lucene language
+	 * @param numResults		number of figures to include in the result list
+	 * @return result list
+	 */
+	public ScoreDoc[] search(Query q, int numResults) throws IOException
 	{
-		Path p = Paths.get(indexDir);
-		Directory indexDirectory = FSDirectory.open(p);
-		reader = DirectoryReader.open(indexDirectory);
-		searcher = new IndexSearcher(reader);
-		searcher.setSimilarity(new BM25Similarity());
-		queryCreator = new QueryCreator();
-	}
-	
-	public void setSearchFields(HashMap<String,Float> searchFields)
-	{
-		this.searchFields = searchFields;
-		queryCreator.setSearchFields(searchFields);
-	}
-	
-	public ScoreDoc[] search(String keywords, int numResults, String operator) throws IOException
-	{
-		ArrayList<String> keywordsList = new ArrayList<String>(Arrays.asList(keywords.split(" ")));
-		Query query = queryCreator.create(keywordsList, operator);
-		TopDocs docs = searcher.search(query, numResults);
+		TopDocs docs = searcher.search(q, numResults);	
 		return docs.scoreDocs;
 	}
-	
+
+	/**
+	 * A search over the collection including the construction of the query.
+	 * @param keywords		the query text from the user
+	 * @param numResults		number of figures to include in the result list
+	 * @param fieldValueMap	the fields to use for the query and their weights
+	 * @return result list
+	 */
 	public ScoreDoc[] searchWithFields(String keywords, int numResults, HashMap<String,Double> fieldValueMap) throws IOException
 	{
 		ArrayList<String> keywordsList = new ArrayList<String>(Arrays.asList(keywords.split(" ")));
@@ -77,52 +81,14 @@ public class SearchEngine {
 		TopDocs docs = searcher.search(query, numResults);
 		return docs.scoreDocs;
 	}
-	
-	public ScoreDoc[] search(Query q, int numResults) throws IOException
-	{
-		TopDocs docs = searcher.search(q, numResults);	
-		return docs.scoreDocs;
-	}
-	
-	public String printResult(ScoreDoc[] result) throws IOException
-	{
-		String output = "";
-		for(int i = 0; i < result.length; i++)
-		{
-			int rank = i+1;
-			Document HitDoc = searcher.doc(result[i].doc);
-			List<IndexableField> fields = HitDoc.getFields();
-			output += "=================" + rank + "=================\n";
-			for(IndexableField f : fields)
-			{	
-				String fieldName = f.name();
-				String content = HitDoc.get(fieldName);
-				output += fieldName + ": " + content + "\n";
-			}
-		}
-		return output;
-	}
-	
-	public ArrayList<HashMap<String,String>> getContent(ScoreDoc[] result) throws IOException
-	{	
-		ArrayList<HashMap<String,String>> output = new ArrayList<>();
-		for(int i = 0; i < result.length; i++)
-		{
-			HashMap<String,String> singleMap = new HashMap<>();
-			Document HitDoc = searcher.doc(result[i].doc);
-			List<IndexableField> fields = HitDoc.getFields();
-			for(IndexableField f : fields)
-			{	
-				String fieldName = f.name();
-				String content = HitDoc.get(fieldName);
-				singleMap.put(fieldName, content);
-			}
-			output.add(singleMap);
-		}
-		return output;
-	}
-	
-	public ArrayList<HashMap<String,String>> getContentSubset(ScoreDoc[] result, ArrayList<String> fields) throws IOException
+			
+	/**
+	 * Get the content of fields for the figures in a result list (usually to be presented to the user).
+	 * @param result		the result list of figures
+	 * @param fields		the fields for which we extract the content
+	 * @return a list of map where in each map we have the content of a specific figure (ordered as in the result list)
+	 */
+	public ArrayList<HashMap<String,String>> getResultListContent(ScoreDoc[] result, ArrayList<String> fields) throws IOException
 	{	
 		ArrayList<HashMap<String,String>> output = new ArrayList<>();
 		for(int i = 0; i < result.length; i++)
@@ -134,85 +100,40 @@ public class SearchEngine {
 				String content = HitDoc.get(fieldName);
 				singleMap.put(fieldName, content);
 			}
-			singleMap.put("score", Float.toString(result[i].score));
+			singleMap.put(Utils.SCORE_FIELD, Float.toString(result[i].score));
 			output.add(singleMap);
 		}
 		return output;
 	}
 	
-	public ArrayList<HashMap<String,String>> getContentById(ArrayList<String> figureIds) throws IOException {
+	/**
+	 * Get the content of fields for figures in a list (based on the figure id).
+	 * @param figureIds		identifiers of figures for the content extraction (identifier in the form of paperId_figureId)
+	 * @return a list of map where in each map we have the content of a specific figure (ordered as in the figures list)
+	 */
+	public ArrayList<HashMap<String,String>> getFiguresSetContent(ArrayList<String> figureIds) throws IOException {
 		ArrayList<HashMap<String,String>> output = new ArrayList<>();
-		
 		for(String figureId : figureIds) {
-			HashMap<String, String> fields = getFieldsFromId(figureId, Utils.FIGURE_TYPE);
+			HashMap<String, String> fields = getFieldsOfSingleFigure(figureId);
 			if(fields != null)
 				output.add(fields);
 		}
 		return output;	
 	}
 	
- 	public HashMap<String,Float> getTfIdfVector(String text, ArrayList<String> fields) throws IOException
-	{
-		HashMap<String,Float> tfIdfVec = new HashMap<>();
-		HashMap<String,Float> idfVec = new HashMap<>();
-		ArrayList<String> terms = queryCreator.analyzeText(text);
-		for(String term : terms)
-		{
-			if(!idfVec.containsKey(term))
-				idfVec.put(term, getIdf(term, fields));
-			
-			tfIdfVec.put(term, tfIdfVec.getOrDefault(term, 0f) + idfVec.get(term));
-		}
-		return tfIdfVec;	
-	}
-	
-	public Float getIdf(String term, ArrayList<String> fields) throws IOException
-	{
-		Float docCount = 0f;
-		Float numDocs = 0f;
-		for(String field : fields)
-		{
-			Term termInstance = new Term(field, term);                              
-			docCount += (float) Math.max(reader.docFreq(termInstance), 0.01);
-			numDocs += (float) reader.numDocs();
-		}
-		return (float) Math.log(numDocs/docCount);
-	}
-	
-	public String getQueryTextFromId(String id, boolean preprocessFlag, String elementType) throws IOException
-	{
-		String[] args = id.split("_");
-		HashMap<String, String> fieldValueMap = new HashMap<>();
-		fieldValueMap.put(Utils.PAPER_ID_FIELD, args[0]);
-		fieldValueMap.put(Utils.ID_FIELD, args[1]);
-		fieldValueMap.put(Utils.TYPE_FIELD, elementType);
-		
-		Query idQuery = queryCreator.buildFieldsQuery(fieldValueMap);
-		
-		ScoreDoc[] paperIdResult = search(idQuery, 1);
-		assert(paperIdResult.length == 1);
-		Document hitDoc = searcher.doc(paperIdResult[0].doc);
-		String captionText = hitDoc.get(Utils.CAPTION_FIELD);
-		if(preprocessFlag)
-			captionText = preprocessCaption(captionText);
-		return captionText;
-	}
-	
-	public HashMap<String, String> getFieldsFromId(String id, String elementType) throws IOException
+	/**
+	 * Get the content of a single figure.
+	 * @param id		figure identifier in the form of paperId_figureId
+	 * @return a map where with the content of a specific figure
+	 */
+	public HashMap<String, String> getFieldsOfSingleFigure(String id) throws IOException
 	{
 		HashMap<String, String> fields = new HashMap<>();
 		String[] args = id.split("_");
 		HashMap<String, String> fieldValueMap = new HashMap<>();
 		
-		
-		ArrayList<String> paperArgs = new ArrayList<>();
-		for(int i =0; i < args.length-1; i++) {
-			paperArgs.add(args[i]);
-		}
-		String paperId = String.join("_", paperArgs);
-		fieldValueMap.put(Utils.PAPER_ID_FIELD, paperId);
-		fieldValueMap.put(Utils.ID_FIELD, args[args.length-1]);
-		fieldValueMap.put(Utils.TYPE_FIELD, elementType);
+		fieldValueMap.put(Utils.PAPER_ID_FIELD, args[0]);
+		fieldValueMap.put(Utils.FIGURE_ID_FIELD, args[1]);
 		Query idQuery = queryCreator.buildFieldsQuery(fieldValueMap);
 		ScoreDoc[] paperIdResult = search(idQuery, 1);
 		if (paperIdResult.length != 1) return null;
@@ -220,61 +141,5 @@ public class SearchEngine {
 		for(IndexableField field : hitDoc.getFields())
 			fields.put(field.name(), field.stringValue());
 		return fields;
-	}
-	
-	public String preprocessCaption(String inputCaption) throws IOException
-	{
-		String outputCaption = "";
-		ArrayList<String> keywordsList = new ArrayList<String>(Arrays.asList(inputCaption.split(" ")));
-		keywordsList = queryCreator.analyzeTerms(keywordsList);
-		for(String keyword : keywordsList)
-		{
-			if(Utils.isNumeric(keyword)) continue;
-			if(keyword.toLowerCase().equals("table")) continue;
-			if(keyword.toLowerCase().equals("figure")) continue;
-			if(keyword.toLowerCase().equals("fig")) continue;
-			outputCaption += keyword + " ";
-		}
-		return outputCaption.trim();
-	}
-	
-	public void getInPaperFigures(String outputDir) throws IOException {
-
-		int numDocs = reader.maxDoc();
-		ArrayList<String> lines = new ArrayList<>();
-		for(int i=0; i<numDocs ; i++) {
-			Document HitDoc = searcher.doc(i);
-			String paperId = HitDoc.get(Utils.PAPER_ID_FIELD);
-			String elementId = HitDoc.get(Utils.ID_FIELD);
-			String line = paperId + "_" + elementId;
-			HashMap<String, String> fieldValueMap = new HashMap<>();
-			fieldValueMap.put(Utils.PAPER_ID_FIELD, paperId);
-			Query idQuery = queryCreator.buildFieldsQuery(fieldValueMap);
-			ScoreDoc[] paperIdResult = search(idQuery, 100);
-			
-			for(int j = 0; j < paperIdResult.length; j++) {
-				Document d = searcher.doc(paperIdResult[j].doc);
-				String currId = d.get(Utils.ID_FIELD);
-				if(!currId.equals(elementId)) {
-					line += "," + paperId + "_" + currId;
-				}
-			}
-			lines.add(line);
-		}
-		Utils.writeLinesToFile(lines, outputDir);
-	}
-	
-	public static void main(String[] args) throws IOException
-	{
-		HashMap<String,Float> searchFields = new HashMap<>();
-		searchFields.put(Utils.CAPTION_FIELD, 1f);
-		searchFields.put(Utils.MENTION_FIELD + "50", 1f);
-		SearchEngine se = new SearchEngine("/Users/saarkuzi/acl_data/acl_fig_index/", searchFields, "BM25");
-		//SearchEngine se = new SearchEngine("/Users/saarkuzi/Documents/PhDResearch/research_figures/mechanical_index_dir100/", searchFields, "BM25");
-		ArrayList<String> figureIds = new ArrayList<>();
-		figureIds.add("W14-2511.tei.xml_3");
-		figureIds.add("S18-1166.tei.xml_2");
-		
-		se.getInPaperFigures("acl_inPaperFigs.txt");
 	}
 }

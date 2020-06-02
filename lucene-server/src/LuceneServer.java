@@ -1,9 +1,11 @@
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import py4j.GatewayServer;
 
+/**
+ * A search engine server which receives request from some port.
+ */
 public class LuceneServer {
 	
 	public HashMap<String,SearchEngine> engines;
@@ -16,23 +18,23 @@ public class LuceneServer {
 	public LuceneServer() throws IOException
 	{		
 		engines = new HashMap<>();
-		HashMap<String,Float> searchFields = new HashMap<>();
-		searchFields.put(Utils.CAPTION_FIELD, 1f);
-		searchFields.put(Utils.MENTION_FIELD + "50", 1f);
+		String[] indexDirs = Utils.searcherParamsMap.get(Utils.INDEX_CONFIG_PARAM).split(",");
+		String[] similarityNames = Utils.searcherParamsMap.get(Utils.SIMILARITY_CONFIG_PARAM).split(",");
+		String[] collectionNames = Utils.searcherParamsMap.get(Utils.COLLECTION_CONFIG_PARAM).split(",");
 		
-		engines.put("acl_bm25", new SearchEngine(Utils.paramsMap.get("indexDirAclBM25"), searchFields, "BM25"));
-		engines.put("acl_jm01", new SearchEngine(Utils.paramsMap.get("indexDirAclJM01"), searchFields, "JM01"));
-		engines.put("acl_dir100", new SearchEngine(Utils.paramsMap.get("indexDirAclDIR100"), searchFields, "DIR100"));
-		
-		engines.put("railway_bm25", new SearchEngine(Utils.paramsMap.get("indexDirRailwayBM25"), searchFields, "BM25"));
-		engines.put("railway_jm01", new SearchEngine(Utils.paramsMap.get("indexDirRailwayJM01"), searchFields, "JM01"));
-		engines.put("railway_dir100", new SearchEngine(Utils.paramsMap.get("indexDirRailwayDIR100"), searchFields, "DIR100"));
+		for(int i=0; i < indexDirs.length; i++) {
+			SearchEngine singleEngine = new SearchEngine(indexDirs[i], similarityNames[i]);
+			String engineName = collectionNames[i] + "_" + similarityNames[i];
+			System.out.println("Index \"" + engineName + "\" Started Successfully");
+			engines.put(engineName, singleEngine);
+		}
 	}
 	
  	public static void main(String[] args) throws IOException
  	{
-		GatewayServer gatewayServer = new GatewayServer(new LuceneServer(), 25000);
+ 		int portNumber = Integer.parseInt(Utils.searcherParamsMap.get(Utils.PORT_CONFIG_PARAM));
+		GatewayServer gatewayServer = new GatewayServer(new LuceneServer(), portNumber);
         gatewayServer.start();
-        System.out.println("Gateway Server Started");
+        System.out.println("Lucene Server Started");
  	}
 }
