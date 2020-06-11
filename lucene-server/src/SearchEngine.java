@@ -142,4 +142,36 @@ public class SearchEngine {
 			fields.put(field.name(), field.stringValue());
 		return fields;
 	}
+	
+	
+	/**
+	 * Get for every figure in the collection the other figures in the same article.
+	 * @return a mapping between a figure id to other figures in the same article
+	 */
+	public HashMap<String, ArrayList<String>> getArticleFigures() throws IOException {
+		int numDocs = reader.maxDoc();
+		HashMap<String, ArrayList<String>> outputMap = new HashMap<>();
+		
+		for(int i=0; i<numDocs ; i++) {
+			Document HitDoc = searcher.doc(i);
+			String paperId = HitDoc.get(Utils.PAPER_ID_FIELD);
+			String figureId = HitDoc.get(Utils.FIGURE_ID_FIELD);
+			
+			HashMap<String, String> fieldValueMap = new HashMap<>();
+			fieldValueMap.put(Utils.PAPER_ID_FIELD, paperId);
+			Query idQuery = queryCreator.buildFieldsQuery(fieldValueMap);
+			ScoreDoc[] paperIdResult = search(idQuery, 100);
+			
+			ArrayList<String> neighborFigures = new ArrayList<>();
+			for(int j = 0; j < paperIdResult.length; j++) {
+				Document d = searcher.doc(paperIdResult[j].doc);
+				String neighborId = d.get(Utils.FIGURE_ID_FIELD);
+				if(!neighborId.equals(figureId)) {
+					neighborFigures.add(paperId + "_" + neighborId);
+				}
+			}
+			outputMap.put(paperId + "_" + figureId, neighborFigures);
+		}
+		return outputMap;
+	}
 }

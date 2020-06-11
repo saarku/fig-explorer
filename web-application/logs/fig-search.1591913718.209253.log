@@ -1,0 +1,8 @@
+ * Serving Flask app "server" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+search_event,130.126.143.89,1591913721.7129338,example query 1,caption0.5_mention100.5_mention200.0_mention500.0_lines30.0_lines50.0_abstract0.0_title0.0_introduction0.0,0,collection 1,Jelinek-Mercer,none
+search_event,130.126.143.89,1591913724.683058,example query 1,caption0.5_mention100.5_mention200.0_mention500.0_lines30.0_lines50.0_abstract0.0_title0.0_introduction0.0,0,collection 1,Dirichlet,none
+url_event,130.126.143.89,1591913728.711533,example query 1,caption1_mention101_mention200_mention500_lines30_lines50_abstract0_title0_introduction0,figure_idb'P17-2002'2,0,collection 1,Dirichlet

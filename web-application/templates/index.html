@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+<link rel="stylesheet" href="http://timan103.cs.illinois.edu/fig-search-acl//static/style.css">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
+<link rel="stylesheet" href="http://timan103.cs.illinois.edu/fig-search-acl//static/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<title>FigExplorer</title>
+
+<script>
+var query_examples_1_map = {};
+var query_examples_2_map = {};
+var field_weights_map = {};
+var query= "";
+var ip = "incognito";
+var resultPage = 0;
+var collectionSelected;
+var modelSelected;
+var example_figure = "none";
+var server_url = "{{ server_url_input }}";
+
+$(function () {
+	$("#next").hide();
+	$("#backpage").hide();
+	$("#advanced").hide();
+	$("#message").hide();
+	var advanced_section = document.getElementById("advanced");
+	advanced_section.style.display = "none";
+});
+
+var get_results = function(){
+
+	$(".searchResultsContainer").empty();
+
+	for (var field_name in field_weights_map) {
+		$('input:checkbox[name=\"' + field_name + '\"]').prop('checked')? field_weights_map[field_name] = $("#" + field_name + "Val").val(): field_weights_map[field_name] = 0;
+	}
+
+	var model_radio_box = document.getElementsByName("model");
+	for(i = 0; i < model_radio_box.length; i++) {
+		if(model_radio_box[i].checked) {
+			modelSelected = model_radio_box[i].value;
+		}
+	}
+
+	$.ajax({
+		type: 'POST',
+		url: server_url + "search/",
+		data: JSON.stringify({query: query, ip: ip, page: resultPage, collection: collectionSelected,
+		model: modelSelected, field_weights: field_weights_map, example_figure: example_figure}),
+		contentType: "applicaton/json; charset=utf-8",
+		success: function(resultData)
+		{
+			var limit = Math.min(resultData.mentions.length, 10)
+			for (var i=0; i < limit; ++i)
+			{
+				rank = resultPage * 10 + i;
+				$(".searchResultsContainer").append("<p class=\"narrow\"><a target=\"_blank\" href=\"" + resultData.urls[i] +"\" id=\""+resultData.ids[i]+ "\" rank=\"" + rank +"\">"+resultData.captions[i]+"</a><p>");
+				buttons = "<p class=\"narrow\"><input type=\"radio\" id=\"rel\" name=\"" + resultData.ids[i] + "\" value=\"rel_" + resultData.ids[i] + "_" + rank +"\"> <label for=\"relevant\"><font color=\"green\" size=2>Relevant</font></label>";
+				buttons += "&nbsp<input type=\"radio\" id=\"nonrel\" name=\"" + resultData.ids[i] + "\" value=\"non_" + resultData.ids[i] + "_" + rank +"\"> <label for=\"notrelevant\"><font color=\"red\" size=2>NOT Relevant</font></label>";
+
+				if(resultData.paper[i] == "1") {
+					buttons += "&nbsp<button type=\"button\" class=\"mybutton\" id=\"paper\" value=\"paper" + resultData.ids[i] + "\"> <font color=\"#FF8033\" size=2> Paper Info </font></button>";
+				}
+
+				for(var key in resultData) {
+					if(key.includes("related")) {
+						var related_type = key.split("related_")[1];
+						if(resultData[key][i] == "1") {
+							buttons += "&nbsp<button type=\"button\" class=\"mybutton\" id=\""+ key +"\" value=\"" + key + resultData.ids[i] + "\"> <font color=\"#FF8033\" size=2>" + related_type + "</font></button>";
+						}
+					}
+				}
+
+				buttons += "<button type=\"button\" class=\"mybutton\" id=\"example\" value=\"" + resultData.ids[i] + "\"> <font color=\"#FF8033\" size=2> Re-rank using this figure </font></button>";
+				buttons += "</p>";
+				$(".searchResultsContainer").append(buttons);
+				$(".searchResultsContainer").append("<table><tr><td><img id=img" + resultData.ids[i] + " src=" +"\""+ resultData.files[i] + "\" height=90 width=200 alt=\"" +  resultData.captions[i] + "\"></td><td>" + resultData.mentions[i] + "</td></tr></table>");
+				$(".searchResultsContainer").append("<div class=\"liner\" style=\"overflow-x:auto;\" id=\"paper" + resultData.ids[i] + "\"></div>");
+
+				for(var key in resultData) {
+					if(key.includes("related")) {
+						var related_type = key.split("related_")[1];
+						$(".searchResultsContainer").append("<div class=\"liner\" style=\"overflow-x:auto;\" id=\"" + key + resultData.ids[i] + "\"></div>");
+					}
+				}
+
+				$(".searchResultsContainer").append("<div class=\"liner\" style=\"overflow-x:auto;\" id=\"border\"></div>");
+				$("#related").hide();
+			}
+
+			$("#next").show();
+			$("#backpage").show();
+			$("#message").hide();
+
+			if(limit == 0 && resultPage == 0)
+			{
+				$(".searchResultsContainer").append("<p style=\"font-size:20px; color:DarkBlue\">Unfortunately, we were not able to find figures that match your query.</p>");
+				$("#next").hide();
+				$("#backpage").hide();
+			}
+
+			if(limit == 0 && resultPage != 0)
+			{
+				$("#next").hide();
+			}
+
+			if(resultPage == 0)
+			{
+				$("#backpage").hide();
+			}
+		}
+	});
+};
+</script>
+
+<script>
+$(document).ready(function(){
+	$("#close").click(function() {
+		var modal = document.getElementById("myModal");
+		modal.style.display = "none";
+	});
+
+	$("#search").click(function(){
+			resultPage = 0;
+			query = $("#querybox").val();
+			example_figure = "none";
+			get_results();
+	});
+
+	$("#next").click(function(){
+		$("#next").hide();
+		$("#backpage").hide();
+		resultPage = resultPage + 1
+		query = $("#querybox").val();
+		get_results();
+	});
+
+	$("#backpage").click(function(){
+		$("#next").hide();
+		$("#backpage").hide();
+		resultPage = resultPage - 1
+		query = $("#querybox").val();
+		get_results();
+	});
+
+	$(".searchResultsContainer").on("change", 'input[name^="figure_id"]:checked', function() {
+		alert("here");
+		var selectedVal = $(this).val();
+		$.ajax({
+		type: 'POST',
+		url: server_url + "button_log/",
+		data: JSON.stringify({query: query, value: selectedVal, ip: ip, collection: collectionSelected,
+		model: modelSelected, field_weights: field_weights_map}),
+		});
+	});
+
+	$(".searchResultsContainer").on("click", "img", function() {
+		var id = $(this).attr("id");
+		var modal = document.getElementById("myModal");
+		var modalImg = document.getElementById("modalImg");
+		var captionText = document.getElementById("caption");
+		modal.style.display = "block";
+		modalImg.src = $(this).attr("src");
+		captionText.innerHTML = $(this).attr("alt");
+	});
+
+
+	$(".searchResultsContainer").delegate("button", "click", function() {
+
+		var selectedVal = $(this).val();
+
+		if(selectedVal.includes("related_")){
+			var related_type = selectedVal.split("related_")[1];
+			var objTo = document.getElementById(selectedVal);
+			if(objTo.innerHTML != "")
+			{
+				objTo.innerHTML = "";
+			} else {
+				var first_line = "<tr>";
+				var second_line = "<tr>";
+
+				$.ajax({
+					type: 'POST',
+					url: server_url + "related/",
+					data: JSON.stringify({figure_id: selectedVal, collection: collectionSelected, model: modelSelected}),
+					contentType: "applicaton/json; charset=utf-8",
+					success: function(resultData)
+					{
+						var related_captions = resultData.captions;
+						var related_files = resultData.files;
+						var related_urls = resultData.urls;
+						var ids = resultData.ids;
+
+						for(i = 0; i < related_captions.length; i++) {
+							first_line += "<td><img " + " src=" + related_files[i] +" height=90 width=200 alt=\"" +  related_captions[i] + "\"></td>";
+							second_line += "<td><font size=\"1\">" + "<a target=\"_blank\" href=\"" + related_urls[i] +"\" id=\""+related_urls[i] + "\" rank=\"related\">" + related_captions[i] + "</a>" + "</font> <button type=\"button\" class=\"mybutton\" id=\"example\" value=\"" + ids[i] + "\"> <font color=\"#FF8033\" size=1> [Re-rank using this figure] </font></button></td>";
+						}
+
+						var button_min = "<button type=\"button\" class=\"mybutton\" id=\"related\" value=\"" + selectedVal + "\"> <font color=\"#FF8033\" size=2> Minimize ^</font></button>";
+						objTo.innerHTML = "&nbsp&nbsp&nbsp" + related_type.split('figure_id')[0] + ":<table class=\"fixed\">" + first_line + "</tr>" + second_line + "</tr></table>" + button_min;
+					}
+				});
+			}
+		} else if (selectedVal.includes("paper")) {
+			var objTo = document.getElementById(selectedVal);
+			if(objTo.innerHTML != "")
+			{
+				objTo.innerHTML = "";
+			}
+			else {
+				var first_line = "<tr>";
+				var second_line = "<tr>";
+
+				$.ajax({
+					type: 'POST',
+					url: server_url + "paper/",
+					data: JSON.stringify({figure_id: selectedVal, collection: collectionSelected, model: modelSelected}),
+					contentType: "applicaton/json; charset=utf-8",
+					success: function(resultData)
+					{
+						var paper_title = resultData.title;
+						var paper_abstract = resultData.abstract;
+						var paper_url = resultData.url;
+						var paper_url = resultData.url;
+						var button_min = "<button type=\"button\" class=\"mybutton\" id=\"paper\" value=\"" + selectedVal + "\"> <font color=\"#FF8033\" size=2> Minimize ^</font></button>";
+						objTo.innerHTML = "<p class=\"narrow\"><a target=\"_blank\" href=\""+ paper_url + "\" id=\"" + selectedVal + "\" rank=\"paper\">"+paper_title+"</a><br><br></p><p class=\"narrow\">" + paper_abstract + "<br><br></p>" + button_min;
+					}
+				});
+			}
+		} else {
+			example_figure = selectedVal;
+			$("#next").hide();
+			$("#backpage").hide();
+			resultPage = 0;
+			get_results();
+		}
+	});
+
+	$(".searchResultsContainer").delegate("a", "click",function(){
+		var url = $(this).attr("id");
+		var r = $(this).attr("rank");
+		$.ajax({
+			type: 'POST',
+			url: server_url + "url_log/",
+			data: JSON.stringify({query: query, value: url, ip: ip, rank:r, collection: collectionSelected,
+			model: modelSelected, field_weights: field_weights_map}),
+		});
+	});
+
+	$("#querybox").keyup(function(event) {
+		if (event.keyCode === 13) {
+			$("#search").click();
+		}
+	});
+
+	$('input:radio[name="collection"]').change(function(){
+		collectionSelected = c($('input:radio[name="collection"]:checked').val());
+	});
+
+	$("#drop").change(function(){
+		collectionSelected = this.value;
+		var objTo = document.getElementById("example1_text");
+		objTo.innerHTML = query_examples_1_map[collectionSelected];
+		objTo = document.getElementById("example2_text");
+		objTo.innerHTML = query_examples_2_map[collectionSelected];
+	});
+
+	$("#example1").click(function(){
+		resultPage = 0;
+		query = query_examples_1_map[collectionSelected];
+		document.getElementById("querybox").value=query;
+		example_figure = "none";
+		get_results();
+	});
+
+	$("#example2").click(function(){
+		resultPage = 0;
+		query = query_examples_2_map[collectionSelected];
+		document.getElementById("querybox").value=query;
+		example_figure = "none";
+		get_results();
+	});
+
+	$("#advanced_button").click(function(event) {
+		var x = document.getElementById("advanced");
+		if(x.style.display == "none"){
+			x.style.display = "block";
+		} else {
+			x.style.display = "none";
+		}
+	});
+
+	$("#min").click(function(event) {
+		var x = document.getElementById("advanced");
+		x.style.display = "none";
+
+	});
+
+	$.getJSON('https://api.ipify.org?format=json', function(data){
+		ip = data.ip;
+	});
+
+});
+</script>
+</head>
+<body>
+<div class="topnav" id="top_menu"></div>
+<center><h1>FigExplorer</h1>
+<font size="2">Explore collections of research articles using figures</font><br><br>
+
+<table>
+	<tr><td class="pad">
+	<input id="querybox" size="50" />
+	<button type="button" id="search"> Search </button>
+	<button type="button" id="advanced_button"> Settings </button>
+	</td></tr>
+
+	<tr><td id="collection_menu" class="pad" style="text-align:left"></td></tr>
+	<tr><td class="pad2" style="text-align:center">
+	Try <button type="button" id="example1" class="mybutton"> <font color="#FF8033" id="example1_text"></font></button>
+	or <button type="button" id="example2"  class="mybutton"> <font color="#FF8033" id="example2_text"></font></button>
+	</td></tr>
+</table></center>
+<br>
+
+<div id="advanced"></div>
+<div id="myModal" class="modal">
+	<span class="close" id="close">&times;</span>
+	<img class="modal-content" id="modalImg" height=400 width=190>
+	<div id="caption"></div>
+</div>
+<div class="searchResultsContainer" id="searchResultsContainer"> </div>
+
+<center>
+<br><br>
+<button class="next" type="button" id="backpage" value="none"> <b>&#x226A Previous</b></button>
+<button class="next" type="button" id="next" value="none"><b>Next &#x226B</b></button>
+</center>
+<br><br>
+
+<script>
+	$.ajax({
+		type: 'POST',
+		url: server_url + "initial/",
+		contentType: "applicaton/json; charset=utf-8",
+		async: false,
+		success: function(resultData)
+		{
+			var objTo = document.getElementById("advanced");
+			objTo.innerHTML = resultData.fields_menu;
+			objTo = document.getElementById("collection_menu");
+			objTo.innerHTML = resultData.collection_menu;
+
+			var collection_names = resultData.collection_names.split(",");
+			var query_examples_1 = resultData.query_examples_1.split(",");
+			var query_examples_2 = resultData.query_examples_2.split(",");
+
+
+			for (var i=0; i<collection_names.length; i++) {
+				query_examples_1_map[collection_names[i]] = query_examples_1[i];
+				query_examples_2_map[collection_names[i]] = query_examples_2[i];
+			}
+
+			collectionSelected = collection_names[0];
+			modelSelected = resultData.model_names.split(",")[0];
+
+			objTo = document.getElementById("example1_text");
+			objTo.innerHTML = query_examples_1_map[collection_names[0]];
+			objTo = document.getElementById("example2_text");
+			objTo.innerHTML = query_examples_2_map[collection_names[0]];
+
+
+			var field_weights = resultData.field_weights.split(",");
+			var field_names = resultData.field_names.split(",");
+
+			for(var i=0; i<field_names.length; i++) {
+				field_weights_map[field_names[i]] = parseInt(field_weights[i]);
+			}
+
+			objTo = document.getElementById("top_menu");
+			objTo.innerHTML = resultData.top_menu;
+		}
+	});
+</script>
+
+</body>
+</html>

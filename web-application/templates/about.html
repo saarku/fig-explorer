@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+<title>FigExplorer</title>
+<link rel="stylesheet" href="http://timan103.cs.illinois.edu/fig-search-acl//static/style.css">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
+<link rel="stylesheet" href="http://timan103.cs.illinois.edu/fig-search-acl//static/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+<div class="topnav" id="top_menu"></div>
+		&nbsp;
+<p> FigExplorer is a tool for advanced exploration of collections of research articles using figures.
+    In this page, we provide information about this tool. </p>
+
+<script>
+var server_url = "{{ server_url_input }}";
+$.ajax({
+    type: 'POST',
+    url: server_url + "initial/",
+    contentType: "applicaton/json; charset=utf-8",
+    async: false,
+    success: function(resultData)
+    {
+        var objTo = document.getElementById("top_menu");
+        objTo.innerHTML = resultData.top_menu;
+    }
+});
+</script>
+
+</body>
+</html>

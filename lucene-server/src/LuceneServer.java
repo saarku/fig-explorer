@@ -18,13 +18,13 @@ public class LuceneServer {
 	public LuceneServer() throws IOException
 	{		
 		engines = new HashMap<>();
-		String[] indexDirs = Utils.searcherParamsMap.get(Utils.INDEX_CONFIG_PARAM).split(",");
-		String[] similarityNames = Utils.searcherParamsMap.get(Utils.SIMILARITY_CONFIG_PARAM).split(",");
-		String[] collectionNames = Utils.searcherParamsMap.get(Utils.COLLECTION_CONFIG_PARAM).split(",");
+		String[] indexs = Utils.searcherParamsMap.get(Utils.INDEX_CONFIG_PARAM).split(";");
+
 		
-		for(int i=0; i < indexDirs.length; i++) {
-			SearchEngine singleEngine = new SearchEngine(indexDirs[i], similarityNames[i]);
-			String engineName = collectionNames[i] + "_" + similarityNames[i];
+		for(int i=0; i < indexs.length; i++) {
+			String[] indexArgs = indexs[i].split(",");
+			SearchEngine singleEngine = new SearchEngine(indexArgs[2], indexArgs[1]);
+			String engineName = indexArgs[0] + "_" + indexArgs[1];
 			System.out.println("Index \"" + engineName + "\" Started Successfully");
 			engines.put(engineName, singleEngine);
 		}

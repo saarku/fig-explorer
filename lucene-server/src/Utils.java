@@ -13,7 +13,7 @@ import org.apache.lucene.analysis.CharArraySet;
 public class Utils {
 	
 	public static final String INDEX_CONFIG_DIR = "index.builder.config";
-	public static final String SEARCHER_CONFIG_DIR = "lucene.server.config";
+	public static final String SEARCHER_CONFIG_DIR = "../fig.explorer.config";
 	public static final float DIRICHLET_MU = 100;
 	public static final float JELINEK_MERCER_WEIGHT = 0.1f;
 	public static final String BM25_SIMILARITY = "BM25";
@@ -29,8 +29,7 @@ public class Utils {
 	public static final String SIMILARITY_CONFIG_PARAM = "similarityFunctionName";
 	public static final String INDEX_CONFIG_PARAM = "indexDir";
 	public static final String DATA_CONFIG_PARAM = "dataDir";
-	public static final String COLLECTION_CONFIG_PARAM = "collectionName";
-	public static final String PORT_CONFIG_PARAM = "portNumber";
+	public static final String PORT_CONFIG_PARAM = "lucenePortNumber";
 	
 	public static final int FIELD_TYPE_POSITION = 0;
 	public static final int FIELD_STORE_POSITION = 1;
