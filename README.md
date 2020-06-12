@@ -17,3 +17,5 @@ In order to set up the system, the following steps should be followed:
 2. [Learning figure representations and inferring reladness relations between figures (optional).](https://github.com/saarku/fig-explorer/tree/master/figure-embeddings)
 3. [Building a figure index.](https://github.com/saarku/fig-explorer/tree/master/lucene-server)
 4. [Setting up the web-application.](https://github.com/saarku/fig-explorer/tree/master/web-application)
+
+To facilitate to deployment of the system, we provide a [toy dataset](https://github.com/saarku/fig-explorer/tree/master/small_dataset) for which the system is configured to work smoothly.
