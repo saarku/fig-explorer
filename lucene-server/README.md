@@ -7,7 +7,7 @@ This module is used for (1) building an index (the IndexBuilder.java code) and (
 We assume the following input ([example](https://github.com/saarku/fig-explorer/tree/master/small_dataset/acl_figures)). A folder which contains files where each file corresponds to a research article and contains information about the figures contained in this article. The name of the file will be considered as the article identifier and the combination of a figure number and the article identifier serves as a unique figure identifier.
 Each file is composed of lines where in each line there is a single figure field for indexing; an XML tag contains the field name. The "<figure>" tag includes the figure number. Thus the "<figure>" tag marks the begging of fields corresponding to the specific figure (until we reach the next "<figure>" tag). For assistance in creating these files from the pdf collection, please take a look [here](https://github.com/saarku/fig-explorer/tree/master/pre-processing).
 
-The next step will be to edit the configuration file for indexing (index.builder.config):
+The next step will be to edit the configuration file for indexing ([index.builder.config](https://github.com/saarku/fig-explorer/blob/master/lucene-server/index.builder.config)):
 * fields - the figure fields that we want to index where the fields are separated with ";" and the parameters of each field are separated with ",". A field has 4 parameters: field name, field type, store information, and minimum length.
   * field name- the name of the field as in the input file.
   * field type- the type of data to be indexed (currently "text" and "string" are supported).
@@ -32,3 +32,7 @@ The first step is to set up the configuration file [fig.explorer.config](https:/
  * The directory of the index.
 * stopwordDir- a file with a stopword in each line (optional).
 * lucenePortNumber- the port number in which the search engine server "listens".
+
+Finally, use the following two commands to start the engine:\
+javac -cp "./:src/:jar/*" src/LuceneServer.java \
+java -cp "./:src/:jar/*" LuceneServer
