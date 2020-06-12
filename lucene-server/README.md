@@ -20,5 +20,5 @@ The next step will be to edit the configuration file for indexing (index.builder
 Note the each combination of a collection and a similarity function requires a seperate index. Hence, when setting an Application, you might expect building several indexes.
 
 After the data folder is ready and the configuration file was modified, use the following commands to build the index:
-javac -cp "./:src/:jar/*" src/IndexBuilder.java
+javac -cp "./:src/:jar/*" src/IndexBuilder.java \
 java -cp "./:src/:jar/*" IndexBuilder
