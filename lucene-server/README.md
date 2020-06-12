@@ -27,9 +27,9 @@ java -cp "./:src/:jar/*" IndexBuilder
 
 The first step is to set up the configuration file [fig.explorer.config](https://github.com/saarku/fig-explorer/blob/master/fig.explorer.config). This file contains configurations that are used both by the LuceneServer code and the web application code. Here we explain the parameters that are needed for the LuceneServer code (i.e., for setting the search engine server).
 * indexDir- all of the indexes that will be used in the application. The indexes are separated by ";" and each index has 3 parameters separated by ",":
- * The name of the collection.
- * The name of the similarity function (a combination of a collection and a similarity function serves as a unique identifier for an index).
- * The directory of the index.
+  * The name of the collection.
+  * The name of the similarity function (a combination of a collection and a similarity function serves as a unique identifier for an index).
+  * The directory of the index.
 * stopwordDir- a file with a stopword in each line (optional).
 * lucenePortNumber- the port number in which the search engine server "listens".
 
