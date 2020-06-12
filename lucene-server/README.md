@@ -9,10 +9,10 @@ Each file is composed of lines where in each line there is a single figure field
 
 The next step will be to edit the configuration file for indexing (index.builder.config):
 * "fields" - the figure fields that we want to index where the fields are separated with ";" and the parameters of each fields are seperated with ",". A field has 4 parameters: field name, field type, store information, and minimum length.
-  ** field name- the name of the field as in the input file.
-  ** field type- the type of data to be indexed (currently "text" and "string" are supported).
-  ** store information- put "store" in order to also index the raw data (can be used for presentation purposes), and put "nostore" otherwise
-  ** minimum length- the minimal number of words in a field that is required to index the figure.
+  * field name- the name of the field as in the input file.
+  * field type- the type of data to be indexed (currently "text" and "string" are supported).
+  * store information- put "store" in order to also index the raw data (can be used for presentation purposes), and put "nostore" otherwise
+  * minimum length- the minimal number of words in a field that is required to index the figure.
 * "indexDir" - the directory for the index (please use an empty/non-existent directory).
 * "stopwordDir" - a file with a stopword in each line (optional).
 * "dataDir" - the folder with the input data.
