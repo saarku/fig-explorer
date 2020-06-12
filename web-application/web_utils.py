@@ -22,12 +22,12 @@ class WebUtils:
 
         # The names of different figure fields that are used by the web server.
         self.CAPTION_FIELD = self.configurations_dict.get('captionField', [('caption',)])[0][0]
-        self.FIGURE_FIELD = self.configurations_dict.get('figureIdField', [('figure',)])[0][0]
-        self.PAPER_FIELD = self.configurations_dict.get('paperIdField', [('paper',)])[0][0]
         self.FILE_FIELD = self.configurations_dict.get('imageFileField', [('file',)])[0][0]
         self.SNIPPET_FIELD = self.configurations_dict.get('snippetField', [('snippet5',)])[0][0]
         self.TITLE_FIELD = self.configurations_dict.get('titleField', [('title',)])[0][0]
         self.ABSTRACT_FIELD = self.configurations_dict.get('abstractField', [('abstract',)])[0][0]
+        self.FIGURE_FIELD = 'figure'
+        self.PAPER_FIELD = 'paper'
         self.SCORE_FIELD = 'score'
 
         # The names of the different fields in the configuration file.
