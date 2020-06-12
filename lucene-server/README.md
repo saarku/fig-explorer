@@ -23,7 +23,7 @@ After the data folder is ready and the configuration file was modified, use the 
 javac -cp "./:src/:jar/*" src/IndexBuilder.java \
 java -cp "./:src/:jar/*" IndexBuilder
 
-## How to set up a search engine?
+## How to start a search engine server?
 
 The first step is to set up the configuration file [fig.explorer.config](https://github.com/saarku/fig-explorer/blob/master/fig.explorer.config). This file contains configurations that are used both by the LuceneServer code and the web application code. Here we explain the parameters that are needed for the LuceneServer code (i.e., for setting the search engine server).
 * indexDir- all of the indexes that will be used in the application. The indexes are separated by ";" and each index has 3 parameters separated by ",":
