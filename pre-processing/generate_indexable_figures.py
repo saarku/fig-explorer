@@ -1,0 +1,153 @@
+"""Use this code to build the input data for Lucene indexing using the outputs of Pdffigures and Grobid"""
+import os
+import re
+import extract_figure_text
+import time
+import utils
+
+
+def get_article_text(article_lines, opening_tags, closing_tag):
+    """Get text from the article's Grobid file based on XML tags.
+
+    Args:
+      article_lines: (list) list of the Grobid file lines.
+      opening_tags: (string) the XML tag that opens.
+      closing_tag: (string) the XML tag that closes.
+    Returns:
+      (list). The list of the contents that were extracted.
+    """
+    output = []
+    for line in article_lines:
+
+        for begin_tag in opening_tags:
+            args = line.split(begin_tag)
+            if len(args) > 1:
+                break
+        if len(args) == 0:
+            continue
+        else:
+            for i in range(1, len(args)):
+                sub_args = args[i].split(closing_tag)
+                if len(sub_args) != 2:
+                    continue
+                text = re.sub('<formula.*?</formula>', '', sub_args[0])
+                output += [utils.clean_xml_tags(text).strip()]
+    return output
+
+
+def get_article_abstract(article_lines):
+    """Extract the article's abstract from the article's Grobid file.
+
+    Args:
+      article_lines: (list) list of the Grobid file lines.
+    Returns:
+      (string). The abstract text.
+    """
+    abstract_flag = False
+    abstract_content = ''
+    for line in article_lines:
+        if '<abstract>' in line:
+            abstract_flag = True
+        elif abstract_flag:
+            abstract_content = re.sub('<formula.*?</formula>', '', line)
+            abstract_content = utils.clean_xml_tags(abstract_content).strip()
+            abstract_flag = False
+    return abstract_content
+
+
+def process_grobid(grobid_files_directory):
+    """Perform processing of the Grobid output files to get the relevant parts from it.
+
+    Args:
+      grobid_files_directory: (string) the folder with the outputs of Grobid.
+
+    Returns:
+      (string). The directory of the folder with the processed files.
+    """
+    temp_output_dir = str(time.time())
+    os.mkdir(temp_output_dir)
+
+    paragraph_begin = ['<p>']
+    paragraph_end = '</p>'
+    fig_begin = ['<figDesc>']
+    fig_end = '</figDesc>'
+    title_begin = ['<title level=\"a\" type=\"main\">']
+    title_end = '</title>'
+    intro_begin = ['<div xmlns=\"http://www.tei-c.org/ns/1.0\"><head n=\"1\">Introduction</head>',
+                   '<div xmlns=\"http://www.tei-c.org/ns/1.0\"><head n=\"1\">INTRODUCTION</head>',
+                   '<div xmlns=\"http://www.tei-c.org/ns/1.0\"><head n=\"1\">introduction</head>',
+                   '<div xmlns=\"http://www.tei-c.org/ns/1.0\"><head>Introduction</head>',
+                   '<div xmlns=\"http://www.tei-c.org/ns/1.0\"><head>INTRODUCTION</head>',
+                   '<div xmlns=\"http://www.tei-c.org/ns/1.0\"><head>introduction</head>',
+                   '<div xmlns=\"http://www.tei-c.org/ns/1.0\"><head n=\"1.\">Introduction</head>',
+                   '<div xmlns=\"http://www.tei-c.org/ns/1.0\"><head n=\"1.\">INTRODUCTION</head>',
+                   '<div xmlns=\"http://www.tei-c.org/ns/1.0\"><headn=\"1.\">introduction</head>'
+                   ]
+    intro_end = '</div>'
+
+    for single_dir in os.listdir(grobid_files_directory):
+        if not os.path.isfile(grobid_files_directory + '/' + single_dir) or single_dir == '.DS_Store':
+            continue
+
+        article_lines = utils.read_lines_from_file(grobid_files_directory + '/' + single_dir)
+        article_text = get_article_text(article_lines, paragraph_begin, paragraph_end)
+        figure_captions = get_article_text(article_lines, fig_begin, fig_end)
+        abstract = get_article_abstract(article_lines)
+        title = get_article_text(article_lines, title_begin, title_end)
+        introduction = get_article_text(article_lines, intro_begin, intro_end)
+
+        with open(temp_output_dir + '/' + single_dir, 'w+') as output_file:
+            for line in article_text:
+                if len(line) != 0:
+                    output_file.write(line + '\n')
+
+            output_file.write('<figcaptions>\n')
+            for caption in figure_captions:
+                output_file.write(caption + '\n')
+
+            output_file.write('<title>\n')
+            if len(title) > 0:
+                output_file.write(title[0] + '\n')
+
+            output_file.write('<abstract>\n')
+            output_file.write(abstract + '\n')
+
+            output_file.write('<introduction>\n')
+            if len(introduction) > 0:
+                output_file.write(introduction[0] + '\n')
+    return temp_output_dir
+
+
+def extract_figures(output_directory, grobid_processed_dir, pdffigures_data_dir):
+    """Generate indexable figures from all articles.
+
+    Args:
+      output_directory: (string) the folder for outputting the data.
+      grobid_processed_dir: (string) the folder with the processed Grobid files (generated by 'process_grobid()').
+      pdffigures_data_dir: (string) the folder with the json files that are the output of pdffigures.
+
+    Returns:
+      (string). The directory of the folder with the processed files.
+    """
+    if not os.path.exists(output_directory):
+        os.mkdir(output_directory)
+
+    for article_name in os.listdir(grobid_processed_dir):
+        if article_name == '.DS_Store':
+            continue
+        article_name = article_name.split('.')[0]
+        extract_figure_text.extract_all_article_figures_text(article_name, pdffigures_data_dir, grobid_processed_dir,
+                                                             output_directory)
+
+
+def main():
+    grobid_files_directory = '../small_dataset/grobid_files'
+    pdffigures_data_dir = '../small_dataset/pdffigures_files'
+    output_directory = 'figures_to_index'
+    processed_grobid_dir = process_grobid(grobid_files_directory)
+    extract_figures(output_directory, processed_grobid_dir, pdffigures_data_dir)
+    os.system('rm -rf ' + processed_grobid_dir)
+
+
+if __name__ == '__main__':
+    main()

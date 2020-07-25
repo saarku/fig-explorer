@@ -1,0 +1,161 @@
+[{
+  "renderDpi": 150,
+  "name": "4",
+  "page": 2,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 88.8,
+    "y1": 572.16,
+    "x2": 510.24,
+    "y2": 684.48
+  },
+  "caption": "Figure 4: The agreement rate of each DF between recognized results and canonical DFs.",
+  "imageText": ["TORGO", "(Dysarthric)", "TORGO", "(Non-Dysarthric)", "TIMIT", "a", "te", "t", "R", "e", "n", "e", "m", "A", "g", "re", "n", "t", "o", "ra", "S", "o", "n", "t", "id", "e", "n", "S", "tr", "n", "t", "u", "a", "n", "ti", "n", "C", "o", "l", "n", "ta", "n", "a", "n", "s", "o", "C", "o", "la", "y", "e", "d", "R", "e", "le", "a", "s", "e", "D", "e", "s", "e", "T", "e", "n", "e", "d", "V", "o", "ic", "d", "ir", "a", "te", "A", "s", "p", "l", "s", "a", "N", "a", "l", "b", "ia", "L", "a", "d", "e", "d", "u", "n", "R", "o", "r", "V", "e", "la", "fl", "e", "x", "tr", "o", "R", "e", "r", "e", "o", "la", "A", "lv", "l", "n", "ta", "D", "e", "r", "ri", "o", "A", "n", "te", "l", "te", "ra", "L", "a", "B", "a", "c", "k", "n", "t", "F", "ro", "w", "L", "o", "h", "H", "ig", "100%", "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%"],
+  "renderURL": "/home/skuzi2/acl_files/figures/W15-5115-Figure4-1.png",
+  "captionBoundary": {
+    "x1": 76.69920349121094,
+    "y1": 695.256591796875,
+    "x2": 370.69183349609375,
+    "y2": 698.9860229492188
+  }
+}, {
+  "renderDpi": 150,
+  "name": "3",
+  "page": 2,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 78.72,
+    "y1": 101.75999999999999,
+    "x2": 283.2,
+    "y2": 161.76
+  },
+  "caption": "Figure 3: An example of substitution -- /sh/ /t/. “*” means “don’t care”. The shaded regions represent the outputs that we are interested. “L” and “R” mean labelled and recognized values respectively. “X” shows how the tense value being recognized in two settings. Since the tense value in /sh/ is “*”, we don’t care it being recognized as “*” (a) or “-” (b)",
+  "imageText": ["(a)", "Three-class", "setting", "(b)", "Two-class", "setting", "*", "X", "*", "X", "+", "+", "-", "-", "L", "+", "-", "R", "L", "+", "-", "*", "R"],
+  "renderURL": "/home/skuzi2/acl_files/figures/W15-5115-Figure3-1.png",
+  "captionBoundary": {
+    "x1": 76.69911193847656,
+    "y1": 171.75161743164062,
+    "x2": 285.3307189941406,
+    "y2": 223.12554931640625
+  }
+}, {
+  "renderDpi": 150,
+  "name": "3",
+  "page": 2,
+  "figType": "Table",
+  "regionBoundary": {
+    "x1": 313.92,
+    "y1": 101.75999999999999,
+    "x2": 511.2,
+    "y2": 202.07999999999998
+  },
+  "caption": "Table 3: A comparison of severity and the average DF agreement rate degradation of individual subjects.",
+  "imageText": ["F01", "Severe", "7.9%", "M01", "Severe", "11.2%", "M02", "Severe", "9.1%", "M04", "Severe", "8.7%", "M05", "Moderate-to-severe", "7.4%", "F03", "Moderate", "4.1%", "F04", "Mild", "1.2%", "M03", "Mild", "2.8%", "Difference", "of", "Individual", "DF", "Average", "Agreement", "Rate", "ID", "Severity", "Subjects", "Dysarthric", "Subjects"],
+  "renderURL": "/home/skuzi2/acl_files/figures/W15-5115-Table3-1.png",
+  "captionBoundary": {
+    "x1": 308.6159973144531,
+    "y1": 204.79959106445312,
+    "x2": 516.7081909179688,
+    "y2": 217.75396728515625
+  }
+}, {
+  "renderDpi": 150,
+  "name": "1",
+  "page": 1,
+  "figType": "Table",
+  "regionBoundary": {
+    "x1": 75.84,
+    "y1": 100.8,
+    "x2": 285.12,
+    "y2": 200.16
+  },
+  "caption": "Table 1: The number of utterances per speaker in the dataset.",
+  "imageText": ["F01", "118", "FC01", "152", "F03", "545", "FC02", "965", "F04", "244", "FC03", "962", "M01", "371", "MC01", "726", "M02", "227", "MC02", "373", "M03", "406", "MC03", "799", "M04", "275", "MC04", "628", "M05", "332", "terances", "Number", "of", "ut-", "terances", "Speaker", "ID", "Speaker", "ID", "Number", "of", "ut-", "Dysarthric", "Subjects", "Control", "Speakers"],
+  "renderURL": "/home/skuzi2/acl_files/figures/W15-5115-Table1-1.png",
+  "captionBoundary": {
+    "x1": 76.23200225830078,
+    "y1": 203.28158569335938,
+    "x2": 279.1401672363281,
+    "y2": 207.010986328125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "1",
+  "page": 1,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 316.8,
+    "y1": 100.8,
+    "x2": 511.2,
+    "y2": 124.32
+  },
+  "caption": "Figure 1: An example of a constrained grammar to handle phone deletion. The optional phones are braced by squared brackets [].",
+  "imageText": ["Transcription:", "/f", "iy/", "(“fee”)", "Constrained", "grammar:", "[sil]", "[f]", "[sil]", "[iy]", "[sil]"],
+  "renderURL": "/home/skuzi2/acl_files/figures/W15-5115-Figure1-1.png",
+  "captionBoundary": {
+    "x1": 311.5350036621094,
+    "y1": 127.02664184570312,
+    "x2": 516.736083984375,
+    "y2": 150.02398681640625
+  }
+}, {
+  "renderDpi": 150,
+  "name": "2",
+  "page": 1,
+  "figType": "Table",
+  "regionBoundary": {
+    "x1": 310.56,
+    "y1": 288.47999999999996,
+    "x2": 518.4,
+    "y2": 550.0799999999999
+  },
+  "caption": "Table 2: The 21 DFs and their brief descriptions.",
+  "imageText": ["behind", "the", "constriction", "Sonorant", "[6]", "Pressure", "does", "not", "build", "up", "Any", "obstacle", "being", "placed", "in", "the", "airway", "downstream", "from", "the", "constriction", "Strident", "[6]", "Continuant", "[6]", "Forming", "of", "complete", "closure", "of", "constrictions", "in", "oral", "cavity", "Delayed", "Release", "[20]", "Slow", "release", "of", "stop", "closure", "Consonantal", "[6]", "The", "absence", "or", "modification", "Tense", "vowels", "are", "more", "in-", "tense,", "of", "longer", "duration", "and", "articulated", "with", "a", "greater", "de-", "viation", "of", "the", "vocal", "cavity", "from", "its", "rest", "position", "then", "the", "lax", "vowels", "Tense", "[20]", "free", "Articulator-", "the", "vocal", "cords", "Vocal", "cords", "Voiced", "[18]", "There", "is", "periodic", "vibration", "of", "the", "release", "Glottis", "Aspirated", "[17]", "The", "glottis", "stays", "open", "during", "Soft", "Palate", "Nasal", "[6]", "The", "soft", "palate", "is", "lowered", "Lips", "Rounded", ",", "Labial", "[6]", "The", "shape", "of", "lips", "Dental", "[16]", ",", "Alveolar", "[16],", "Retroflex", "[19],", "Velar", "[16]", "The", "tip/blade", "of", "tongue", "will", "be", "placed", "different", "places", "to", "form", "a", "constriction.", "used", "to", "produce", "sound", "Lateral,", "Anterior", "[6]", "The", "tongue", "part", "and", "shape", "Place", "of", "tongue", "in", "vowel", "High,", "Low,", "Front,", "Back", "[6]", "Tongue", "Features", "Meaning", "Group", "Distinctive"],
+  "renderURL": "/home/skuzi2/acl_files/figures/W15-5115-Table2-1.png",
+  "captionBoundary": {
+    "x1": 311.5350036621094,
+    "y1": 552.5565795898438,
+    "x2": 473.8054504394531,
+    "y2": 556.2860107421875
+  }
+}, {
+  "renderDpi": 150,
+  "name": "2",
+  "page": 1,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 316.8,
+    "y1": 164.64,
+    "x2": 511.2,
+    "y2": 238.07999999999998
+  },
+  "caption": "Figure 2: An aligned result for the M01’s utterance. “_” represents missing phones. In [14], the authors reported M01 often omitted the initial /s/ and /h/and such cases are captured in the alignment in this work.",
+  "imageText": ["/_", "tcl", "t", "uh", "dcl", "d/", "/eh", "m", "pcl", "p", "tcl", "t", "_/", "“The”", "“little”", "“schoolhouse”", "“stood”", "“empty”", "/dh", "ax/", "/l", "ih", "tcl", "t/", "/_", "kcl", "k", "uw", "l", "_", "aw1", "aw2", "s/", "Prompt:", "“The", "little", "schoolhouse", "stood", "empty”", "Aligned", "results:"],
+  "renderURL": "/home/skuzi2/acl_files/figures/W15-5115-Figure2-1.png",
+  "captionBoundary": {
+    "x1": 311.53497314453125,
+    "y1": 241.23361206054688,
+    "x2": 516.9576416015625,
+    "y2": 273.6895751953125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "5",
+  "page": 3,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 76.8,
+    "y1": 103.2,
+    "x2": 514.0799999999999,
+    "y2": 355.68
+  },
+  "caption": "Figure 5: The difference between the average DF agreement rate from the control subjects and the corresponding DF agreement rate of each dysarthric subject. The agreement rates of most of the DF drop substainally for severely dysarthric subjects. The agreement rates in moderately and mildly dysarthric subjects only dropped in a few DFs.",
+  "imageText": ["Tongue", "Lips", "Articulator-free", "Tongue", "Lips", "Articulator-free", "Tongue", "Lips", "Articulator-free", "t)", "rg", "e", "T", "a", "o", "l", "-", "n", "tr", "C", "o", "g", "e", "v", "e", "ra", "(", "A", "a", "te", "t", "R", "e", "n", "e", "m", "rg", "re", "∆", "A", "n", "t", "n", "o", "ra", "S", "o", "n", "t", "id", "e", "S", "tr", "n", "t", "u", "a", "n", "ti", "n", "C", "o", "ta", "l", "n", "a", "n", "n", "s", "o", "C", "o", "le", "a", "s", "e", "R", "e", "la", "y", "e", "d", "D", "e", "n", "s", "e", "T", "e", "ic", "e", "d", "V", "o", "d", "ir", "a", "te", "A", "s", "p", "l", "s", "a", "N", "a", "l", "b", "ia", "L", "a", "d", "e", "d", "u", "n", "R", "o", "la", "r", "V", "e", "fl", "e", "x", "tr", "o", "R", "e", "la", "r", "e", "o", "A", "lv", "l", "n", "ta", "D", "e", "ri", "o", "r", "A", "n", "te", "l", "te", "ra", "L", "a", "c", "k", "B", "a", "n", "t", "F", "ro", "w", "L", "o", "h", "H", "ig", "n", "t", "n", "o", "ra", "S", "o", "n", "t", "id", "e", "S", "tr", "n", "t", "u", "a", "n", "ti", "n", "C", "o", "l", "n", "ta", "n", "a", "n", "s", "o", "C", "o", "s", "e", "le", "a", "R", "e", "la", "y", "e", "d", "D", "e", "n", "s", "e", "T", "e", "d", "ic", "e", "V", "o", "d", "ir", "a", "te", "A", "s", "p", "l", "s", "a", "N", "a", "l", "b", "ia", "L", "a", "d", "e", "d", "u", "n", "R", "o", "la", "r", "V", "e", "fl", "e", "x", "tr", "o", "R", "e", "la", "r", "e", "o", "A", "lv", "l", "n", "ta", "D", "e", "ri", "o", "r", "A", "n", "te", "l", "te", "ra", "L", "a", "c", "k", "B", "a", "n", "t", "F", "ro", "w", "L", "o", "h", "H", "ig", "ra", "n", "t", "n", "o", "S", "o", "n", "t", "id", "e", "S", "tr", "n", "t", "u", "a", "n", "ti", "n", "C", "o", "l", "n", "ta", "n", "a", "n", "s", "o", "C", "o", "a", "s", "e", "e", "le", "d", "R", "la", "y", "e", "D", "e", "s", "e", "T", "e", "n", "e", "d", "V", "o", "ic", "d", "a", "te", "A", "s", "p", "ir", "l", "s", "a", "N", "a", "l", "b", "ia", "L", "a", "d", "d", "e", "u", "n", "R", "o", "r", "V", "e", "la", "x", "fl", "e", "tr", "o", "R", "e", "r", "e", "o", "la", "A", "lv", "l", "n", "ta", "D", "e", "o", "r", "te", "ri", "A", "n", "l", "te", "ra", "L", "a", "c", "k", "B", "a", "n", "t", "F", "ro", "25%", "30%", "H", "ig", "h", "L", "o", "w", "20%", "15%", "10%", "5%", "0%", "-5%", "-10%", "(f)", "MC04", "Control", "(e)", "M03", "Mild", "to", "Moderate", "(d)", "M04", "Moderate", "to", "Severe", "(a)", "F01", "ra", "n", "t", "n", "o", "S", "o", "n", "t", "id", "e", "S", "tr", "t", "u", "a", "n", "n", "ti", "n", "C", "o", "l", "n", "ta", "n", "a", "n", "s", "o", "C", "o", "a", "s", "e", "e", "le", "d", "R", "la", "y", "e", "D", "e", "n", "s", "e", "T", "e", "e", "d", "V", "o", "ic", "te", "d", "ir", "a", "A", "s", "p", "l", "s", "a", "N", "a", "l", "b", "ia", "L", "a", "d", "d", "e", "u", "n", "R", "o", "la", "r", "V", "e", "x", "fl", "e", "tr", "o", "R", "e", "la", "r", "e", "o", "A", "lv", "l", "n", "ta", "D", "e", "o", "r", "te", "ri", "A", "n", "l", "te", "ra", "L", "a", "B", "a", "c", "k", "n", "t", "F", "ro", "w", "L", "o", "h", "H", "ig", "n", "t", "o", "ra", "S", "o", "n", "n", "t", "id", "e", "S", "tr", "n", "t", "u", "a", "n", "ti", "n", "C", "o", "l", "n", "ta", "n", "a", "n", "s", "o", "C", "o", "a", "s", "e", "e", "le", "d", "R", "la", "y", "e", "D", "e", "s", "e", "T", "e", "n", "e", "d", "V", "o", "ic", "d", "a", "te", "A", "s", "p", "ir", "s", "a", "l", "N", "a", "l", "b", "ia", "L", "a", "d", "d", "e", "u", "n", "R", "o", "r", "V", "e", "la", "x", "fl", "e", "tr", "o", "R", "e", "r", "e", "o", "la", "A", "lv", "l", "n", "ta", "D", "e", "r", "te", "ri", "o", "A", "n", "l", "te", "ra", "L", "a", "c", "k", "B", "a", "n", "t", "F", "ro", "w", "L", "o", "h", "H", "ig", "n", "t", "n", "o", "ra", "S", "o", "n", "t", "id", "e", "S", "tr", "n", "t", "u", "a", "n", "ti", "n", "C", "o", "ta", "l", "n", "a", "n", "n", "s", "o", "C", "o", "le", "a", "s", "e", "R", "e", "la", "y", "e", "d", "D", "e", "n", "s", "e", "T", "e", "ic", "e", "d", "V", "o", "d", "ir", "a", "te", "A", "s", "p", "l", "s", "a", "N", "a", "l", "b", "ia", "L", "a", "d", "e", "d", "u", "n", "R", "o", "la", "r", "V", "e", "fl", "e", "x", "tr", "o", "R", "e", "la", "r", "e", "o", "A", "lv", "l", "n", "ta", "D", "e", "ri", "o", "r", "A", "n", "te", "l", "te", "ra", "L", "a", "c", "k", "B", "a", "n", "t", "F", "ro", "w", "L", "o", "h", "H", "ig", "10%", "15%", "20%", "25%", "30%", "-10%", "-5%", "0%", "5%", "(c)", "FC02(b)", "F03"],
+  "renderURL": "/home/skuzi2/acl_files/figures/W15-5115-Figure5-1.png",
+  "captionBoundary": {
+    "x1": 74.83090209960938,
+    "y1": 366.29962158203125,
+    "x2": 500.66015625,
+    "y2": 389.2969970703125
+  }
+}]

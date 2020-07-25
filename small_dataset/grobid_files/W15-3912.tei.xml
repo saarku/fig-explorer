@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/skuzi2/acl_files/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.5.1-SNAPSHOT" ident="GROBID" when="2018-06-16T08:56+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Data representation methods and use of mined corpora for Indian language transliteration</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+				<date>July 26-31, 2015</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Anoop</forename><surname>Kunchukuttan</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Department of Computer Science and Engineering</orgName>
+								<orgName type="institution">Indian Institute of Technology</orgName>
+								<address>
+									<settlement>Bombay</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Pushpak</forename><surname>Bhattacharyya</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Department of Computer Science and Engineering</orgName>
+								<orgName type="institution">Indian Institute of Technology</orgName>
+								<address>
+									<settlement>Bombay</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Data representation methods and use of mined corpora for Indian language transliteration</title>
+					</analytic>
+					<monogr>
+						<title level="m">Proceedings of the Fifth Named Entity Workshop, joint with 53rd ACL and the 7th IJCNLP</title>
+						<meeting>the Fifth Named Entity Workshop, joint with 53rd ACL and the 7th IJCNLP <address><addrLine>Beijing, China</addrLine></address>
+						</meeting>
+						<imprint>
+							<biblScope unit="page" from="78" to="82"/>
+							<date type="published">July 26-31, 2015</date>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<abstract>
+				<p>Our NEWS 2015 shared task submission is a PBSMT based transliteration system with the following corpus preprocessing enhancements: (i) addition of word-boundary markers, and (ii) language-independent, overlapping character segmentation. We show that the addition of word-boundary markers improves transliteration accuracy substantially, whereas our overlapping segmentation shows promise in our preliminary analysis. We also compare transliteration systems trained using manually created corpora with the ones mined from parallel translation corpus for English to Indian language pairs. We identify the major errors in English to Indian language transliterations by analyzing heat maps of confusion matrices.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">Introduction</head><p>Machine Transliteration can be viewed as a problem of transforming a sequence of characters in one alphabet to another. Transliteration can be seen as a special case of the general translation problem between two languages. The primary differences from the general translation problem are: (i) limited vocabulary size, and (ii) simpler grammar with no reordering. Phrase based statistical machine translation (PB-SMT) is a robust and well-understood technology and can be easily adopted for application to the transliteration problem <ref type="bibr" target="#b11">(Noeman, 2009;</ref><ref type="bibr" target="#b2">Finch and Sumita, 2010)</ref>. Our submission to the NEWS 2015 shared task is a PBSMT system. Over a baseline PBSMT system, we address two issues: (i) suitable data representation for training, and (ii) parallel transliteration corpus availability.</p><p>In many writing systems, the same logical/phonetic symbols can have different character representations depending on whether it occurs in initial, medial or terminal word position. For instance, Indian scripts have different characters for independent vowels and vowel diacritics. Independent vowels typically occurs at the beginning of the word, while diacritics occur in medial and terminal positions. The pronounciation, and hence the transliteration could also depend on the position of the characters. For instance, the terminal ion in nation would be pronounced differently from initial one in ionize. PBSMT learning of character sequence mappings is agnostic of the position of the character in the word. Hence, we explore to transform the data representation to encode position information. <ref type="bibr" target="#b17">Zhang et al. (2012)</ref> did not report any benefit from such a representation for Chinese-English transliteration. We investigated if such encoding useful for alphabetic and consonantal scripts as opposed to logographic scripts like Chinese.</p><p>It is generally believed that syllabification of the text helps improve transliteration systems. However, syllabification systems are not available for all languages. <ref type="bibr" target="#b16">Tiedemann (2012)</ref> proposed a character-level, overlapping bigram representation in the context of machine translation using transliteration. We can view this as weak, coarse and language independent syllabification approach. We explore this overlapping, segmentation approach for the transliteration task.</p><p>For many language pairs, parallel transliteration corpora are not publicly available. However, parallel translation corpora like Europarl ( <ref type="bibr" target="#b7">Koehn, 2005)</ref> and ILCI (Jha, 2012) are available for many language pairs. Transliteration corpora mined from such parallel corpora has been shown to be useful for machine translation, cross lingual information retrieval, etc. ( <ref type="bibr" target="#b8">Kunchukuttan et al., 2014)</ref>. In this paper, we make an intrinsic evaluation of the performance of the automatically mined BrahmiNet transliteration corpus ( <ref type="bibr" target="#b10">Kunchukuttan et al., 2015)</ref> for transliteration between English and Indian languages. The BrahmiNet corpus contains transliteration corpora for 110 Indian language pairs mined from the ILCI corpus, a parallel translation corpora of 11 Indian languages <ref type="bibr" target="#b5">(Jha, 2012)</ref>.</p><p>The rest of the paper is organized as follows. Section 2 and Section 3 describes our system and experimental setup respectively. Section 4 discusses the results of various data representation methods and the use of mined corpus respectively. Section 5 concludes the report.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">System Description</head><p>We use a standard PB-SMT model for transliteration between the various language pairs. It is a discriminative, log-linear model which uses standard SMT features viz. direct/inverse phrase translation probabilities, direct/inverse lexical translation probabilities, phrase penalty, word penalty and language model score. The feature weights are tuned to optimize BLEU ( <ref type="bibr" target="#b13">Papineni et al., 2002</ref>) using the Minimum Error Rate Training algorithm <ref type="bibr" target="#b12">(Och, 2003)</ref>. It would be better to explore optimizing metrics like accuracy or edit distance instead of using BLEU as a proxy for these metrics. We experiment with various transliteration units as discussed in Section 2.1. We use a 5-gram language model over the transliteration units estimated using Witten-Bell smoothing. Since transliteration does not require any reordering, monotone decoding was done.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Data Representation</head><p>We create different transliteration models based on different basic transliteration units in the source and target training corpus. We use character (P) as well as bigram representations (T). In character based system, the character is the basic unit of transliteration. In bigram-based system, the overlapping bigram is the basic unit of transliteration. We also augmented the word representation with word boundary markers (M) (ˆ for start of word and $ end of word). The various representations we experimented with are illustrated below:</p><formula xml:id="formula_0">character (P) H I N D I character+boundary marker (M) ˆ H I N D I $ bigram (T) HI IN ND DI I bigram+boundary marker (M+T) ˆH HI IN ND DI I$ $</formula><p>The abbreviations mentioned above are used subsequently to refer to these data representations.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Use of mined transliteration corpus</head><p>We explore the use of transliteration corpora mined from translation corpora for transliteration. <ref type="bibr" target="#b14">Sajjad et al. (2012)</ref> proposed an unsupervised method for mining transliteration pairs from parallel corpus. Their approach models parallel translation corpus generation as a generative process comprising an interpolation of a transliteration and a non-transliteration process. The parameters of the generative process are learnt using the EM procedure, followed by extraction of transliteration pairs from the parallel corpora by setting an appropriate threshold. We compare the quality of the transliteration systems built from such mined corpora with systems trained on manually created NEWS 2015 corpora for English-Indian language pairs.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">Experimental Setup</head><p>For building the transliteration model with the NEWS 2015 shared task corpus as well as the BrahmiNet corpus, we used 500 word pairs for tuning and the rest for SMT training. The experimental results are reported on the NEWS 2015 development sets in both cases. The details of the NEWS 2015 shared task datasets are mentioned in shared text report, while the size of the BrahmiNet datasets are listed below:</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Src Tgt Size</head><note type="other">En Hi 10513 En Ba 7567 En Ta 3549</note><p>We use the Moses toolkit ( <ref type="bibr" target="#b6">Koehn et al., 2007</ref>) to train the transliteration system and the language models were estimated using the SRILM toolkit ( <ref type="bibr">Stolcke and others, 2002</ref>). The transliteration pairs are mined using the transliteration module in Moses ( <ref type="bibr" target="#b1">Durrani et al., 2014</ref>). <ref type="table">Table 1</ref> shows transliteration results for various data representation methods on the development set. We see improvements in transliteration accuracy of upto 18% due to the use of word-boundary markers. The MRR also shows an improvement of upto 15%. An analysis of improvement for the EnHi pair shows that a major reason for the improve-  <ref type="table">Top-1 Accuracy  F-score  MRR  P  M  T  M+T  P  M  T  M+T  P  M  T</ref>   <ref type="table">Table 2</ref>: Top-1 accuracy on NEWS 2015 development set without tuning (in %) ment seems to the correct generation of vowel diacritics (maatraa). Word boundary markers also reduce the following errors: (i) missing initial vowels, (ii) wrong consonants in the initial and final syllable, and (iii) incorrect or spurious generation of halanta (inherent vowel suppressor) character. Some examples of these corrections are shown below:</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">Results and Error Analysis</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Effect of Data Representation methods</head><formula xml:id="formula_1">Src P M KALYARI कालयारी (kAlayArI) कल्यारी (kalyArI) NAHAR ने हर (nehara) नाहर (nAhara) AHILYAA िहल्या (hilyA) अिहल्या (ahilyA) AVEDIS वे िडस (veDisa) एवे िडस (eveDisa) AVEDIS ककतर् पु र (kIrtapura) ककरतपु र (kIratapura)</formula><p>We also tried to identify the major errors in English to Indian languages using heat maps of the character-level confusion matrices <ref type="figure" target="#fig_1">(Figure 1</ref> shows one for En-Hi). We observed that the following errors are common across all EnglishIndian language pairs in the shared task: (i) incorrect generation of vowel diacritics, especially confusion between long and short vowels, (ii) schwa deletion, (iii) confusion between dental and retroflex consonants, (iv) incorrect or spurious generation of halanta (inherent vowel suppressor) character as well as the aakar maatra (vowel diacritic for आ(aa)). Hi and Ba show confusion between sibilants (स,श,ष), while Ta and Ka exhibits incorrect or spurious generation of य (ya).</p><p>However, the use of a overlapping bigram representation does not show any significant improvement in results over the baseline output. The above results are for systems tuned to maximize BLEU. However, BLEU does not seem the most intuitive tuning metric for the the bigram representation. Hence, we compare the untuned output results (shown in <ref type="table">Table 2</ref> for a few language pairs). As we anticipated, we found that the bigram representation gave a significant improvement in accuracy (on an average of about 25%). The combination of word-boundary marker and bigram representation performs best. This suggests the need to tune the SMT system to an alternative metric like edit distance so that the benefit of bigram representation can be properly harnessed. The following is an example where bigram representation resulted in the correct generation of consonants, where the character representation made errors:   where the quality of mined corpus suffers on account of the presence of suffixes due to the agglutinative nature of the language. This results in some wrongly mined pairs as well as smaller number of word pairs being mined. The F-score does not suffer as much as top-1 accuracy and all languages have an F-score greater than 70%. The MRR suggests that the correct transliteration can be found in the top 3 candidates for Hi and Ba, and in the top-7 candidates for Ta. This shows that though the top-1 accuracy of the system is lower than a manually generated corpus, the use of the top-k candidates can be useful in downstream applications like machine translation and cross lingual IR. Since the NEWS 2015 corpus is larger than the BrahmiNet corpus, we train a random subset of the NEWS 2015 corpus of the same size as the BrahmiNet corpus. In addition, we also experiment with stricter selection thresholds in the mining process.</p><formula xml:id="formula_2">Src P T DABHADE दाबहादे (dAbahAde) दाभाडे (dAbhADe)</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Transliteration using an automatically mined corpus</head><p>Since, NEWS 2015 development corpus is quite similar to the NEWS training corpus, we use another corpus <ref type="bibr" target="#b4">(Gupta et al., 2012</ref>) to evaluate both the systems. In all these cases, the NEWS corpus gave superior accuracy as compared to BrahmiNet. To explain the superiority of the NEWS corpus over all the configurations, we computed the average entropy for the conditional transliteration probability ( <ref type="bibr" target="#b0">Chinnakotla et al., 2010</ref>). The average entropy for the P(En|Hi) distribution at the character level is higher for the BrahmiNet corpus (0.8) as compared to the NEWS 2015 corpus (0.574). The same observation is seen for the P(Hi|En) distribution. This means that there is a higher ambiguity in selecting transliteration in the BrahmiNet corpus.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">Conclusion</head><p>We addressed data representation and availability issues in PBSMT based transliteration, with a special focus on English-Indian language pairs. We showed that adding boundary markers to the word representation helps to significantly improve the transliteration accuracy. We also noted that the an overlapping character segmentation can be useful subject to optimizing the appropriate evaluation metrics for transliteration systems. We show that though automatically mined corpora provided lower top-1 transliteration accuracy, the top-10 accuracy, MRR and F-score are competitive to justify the use of the top-k candidates from these mined corpora for translation and IR systems.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Figure 1 :</head><label>1</label><figDesc>Figure 1: Heat Map for En-Hi (marker, news_2015) system. Color in cell indicates proportion of errors (y-axis: reference set, x-axis: hypothesis set)</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false"><head>Table 3 shows results on the development set when trained using the BrahmiNet corpus.</head><label>3</label><figDesc></figDesc><table>The top-1 
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false"><head>Table 3 :</head><label>3</label><figDesc></figDesc><table>Results with BrahmiNet training on 
+NEWS 2105 dev set (in %) </table></figure>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Transliteration for resource-scarce languages</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Manoj</forename><surname>Chinnakotla</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Om</forename><surname>Damani</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Avijit</forename><surname>Satoskar</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Transactions on Asian Language Information Processing</title>
+		<imprint>
+			<date type="published" when="2010" />
+			<publisher>TALIP</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b1">
+	<monogr>
+		<title level="m" type="main">Integrating an Unsupervised Transliteration Model into Statistical Machine Translation</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Nadir</forename><surname>Durrani</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Hieu</forename><surname>Hoang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Philipp</forename><surname>Koehn</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Hassan</forename><surname>Sajjad</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b2">
+	<monogr>
+		<title/>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Andrew</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Eiichiro</forename><surname>Finch</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Sumita</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b3">
+	<analytic>
+		<title level="a" type="main">A bayesian model of bilingual segmentation for transliteration</title>
+	</analytic>
+	<monogr>
+		<title level="m">IWSLT</title>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Mining hindi-english transliteration pairs from online hindi lyrics</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kanika</forename><surname>Gupta</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Monojit</forename><surname>Choudhury</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kalika</forename><surname>Bali</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">LREC</title>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="2459" to="2465" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b5">
+	<analytic>
+		<title level="a" type="main">The TDIL program and the Indian Language Corpora Initiative</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Girish</forename><surname>Nath</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jha</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Language Resources and Evaluation Conference</title>
+		<imprint>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Moses: Open source toolkit for statistical machine translation</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Philipp</forename><surname>Koehn</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Hieu</forename><surname>Hoang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Alexandra</forename><surname>Birch</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Chris</forename><surname>Callison-Burch</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Marcello</forename><surname>Federico</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Nicola</forename><surname>Bertoldi</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Brooke</forename><surname>Cowan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Wade</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Christine</forename><surname>Moran</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Richard</forename><surname>Zens</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 45th Annual Meeting of the ACL on Interactive Poster and Demonstration Sessions</title>
+		<meeting>the 45th Annual Meeting of the ACL on Interactive Poster and Demonstration Sessions</meeting>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="177" to="180" />
+		</imprint>
+	</monogr>
+	<note>Association for Computational Linguistics</note>
+</biblStruct>
+
+<biblStruct xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Europarl: A parallel corpus for statistical machine translation</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Philipp</forename><surname>Koehn</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">MT summit</title>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="volume">5</biblScope>
+			<biblScope unit="page" from="79" to="86" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b8">
+	<monogr>
+		<title level="m" type="main">Rajen Chatterjee, Abhijit Mishra, and Pushpak Bhattacharyya. 2014. The IIT Bombay SMT System for ICON</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Anoop</forename><surname>Kunchukuttan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Ratish</forename><surname>Pudupully</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b9">
+	<monogr>
+				<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Tools</forename><surname>Contest</surname></persName>
+		</author>
+		<title level="m">NLP Tools Contest at ICON</title>
+		<imprint>
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Brahmi-Net: A transliteration and script conversion system for languages of the Indian subcontinent</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Anoop</forename><surname>Kunchukuttan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Ratish</forename><surname>Puduppully</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Pushpak</forename><surname>Bhattacharyya</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Conference of the North American Chapter</title>
+		<imprint>
+			<publisher>Association for Computational Linguistics</publisher>
+			<date type="published" when="2015" />
+		</imprint>
+	</monogr>
+	<note>System Demonstrations</note>
+</biblStruct>
+
+<biblStruct xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Language independent transliteration system using phrase based smt approach on substrings</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Sara</forename><surname>Noeman</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2009 Named Entities Workshop: Shared Task on Transliteration</title>
+		<meeting>the 2009 Named Entities Workshop: Shared Task on Transliteration</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Minimum error rate training in statistical machine translation</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Franz Josef</forename><surname>Och</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 41st Annual Meeting on Association for Computational Linguistics</title>
+		<meeting>the 41st Annual Meeting on Association for Computational Linguistics</meeting>
+		<imprint>
+			<date type="published" when="2003" />
+			<biblScope unit="volume">1</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Bleu: a method for automatic evaluation of machine translation</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kishore</forename><surname>Papineni</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Salim</forename><surname>Roukos</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Todd</forename><surname>Ward</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Weijing</forename><surname>Zhu</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 40th annual meeting on association for computational linguistics</title>
+		<meeting>the 40th annual meeting on association for computational linguistics</meeting>
+		<imprint>
+			<publisher>Association for Computational Linguistics</publisher>
+			<date type="published" when="2002" />
+			<biblScope unit="page" from="311" to="318" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b14">
+	<analytic>
+		<title level="a" type="main">A statistical model for unsupervised and semisupervised transliteration mining</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Hassan</forename><surname>Sajjad</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Alexander</forename><surname>Fraser</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Helmut</forename><surname>Schmid</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 50th Annual Meeting of the Association for Computational Linguistics</title>
+		<meeting>the 50th Annual Meeting of the Association for Computational Linguistics</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Srilm-an extensible language modeling toolkit</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Andreas</forename><surname>Stolcke</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">INTERSPEECH</title>
+		<imprint>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Character-based pivot translation for under-resourced languages and domains</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jörg</forename><surname>Tiedemann</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 13th Conference of the European Chapter of the Association for Computational Linguistics</title>
+		<meeting>the 13th Conference of the European Chapter of the Association for Computational Linguistics</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="141" to="151" />
+		</imprint>
+	</monogr>
+	<note>Association for Computational Linguistics</note>
+</biblStruct>
+
+<biblStruct xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Syllable-based machine transliteration with extra phrase features</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Chunyue</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Tingting</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Tiejun</forename><surname>Zhao</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 4th Named Entity Workshop</title>
+		<meeting>the 4th Named Entity Workshop</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>
