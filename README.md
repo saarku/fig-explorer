@@ -14,7 +14,7 @@ The goal of this system is to facilitate the exploration of research article col
 
 In order to set up the system, the following steps should be followed:
 1. [Building a collection of figures from a set of pdf files.](https://github.com/saarku/fig-explorer/tree/master/pre-processing)
-2. [Learning figure representations and inferring reladness relations between figures (optional).](https://github.com/saarku/fig-explorer/tree/master/figure-embeddings)
+2. [Learning figure representations (embeddings) and inferring semantic relations between figures (optional).](https://github.com/saarku/fig-explorer/tree/master/figure-embeddings)
 3. [Building a figure index.](https://github.com/saarku/fig-explorer/tree/master/lucene-server)
 4. [Setting up the web-application.](https://github.com/saarku/fig-explorer/tree/master/web-application)
 
