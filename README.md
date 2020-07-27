@@ -2,7 +2,7 @@
 A System for Retrieval and Exploration of Figures from Collections of Research Articles.
 A demo of the system can be found [here](http://figuresearch.web.illinois.edu/).
 For more elaborate information please refer to:
-*FigExplorer: A System for Retrieval and Exploration of Figures from Collections of Research Articles. Saar Kuzi, ChengXiang Zhai, Yin Tian, and Haichuan Tang. In Proceedings of SIGIR 2020.*
+*FigExplorer: A System for Retrieval and Exploration of Figures from Collections of Research Articles. Saar Kuzi, ChengXiang Zhai, Yin Tian, and Haichuan Tang. In Proceedings of SIGIR 2020.* [paper](https://dl.acm.org/doi/10.1145/3397271.3401400)
 
 
 The goal of this system is to facilitate the exploration of research article collections using figures and includes the following main functionalities:
