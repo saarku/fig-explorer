@@ -10,7 +10,7 @@ The goal of this system is to facilitate the exploration of research article col
 * Searching for figures using keyword queries.
 * Searching for figures using different textual representations of a figure and different retrieval models.
 * Collecting user feedback in order to build test collections.
-* Exploring related figures for a seed figures using figure embeddings.
+* Exploring related figures for a seed figure using figure embeddings.
 
 In order to set up the system, the following steps should be followed:
 1. [Building a collection of figures from a set of pdf files.](https://github.com/saarku/fig-explorer/tree/master/pre-processing)
