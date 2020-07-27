@@ -22,4 +22,7 @@ Inside the main function, you can decide what operation should be performed (eit
 
 
 ## Using Embeddings to Find Related Figures
-Finally, we can use the embedding to find for each figure its most semantically related figures. To do this, we first perform a retrieval phase using a tf.idf model and the result is then re-ranked using the embedding-based similarity. The output of this function will be a file that can be used directly in the web-based app (take a look [here](https://github.com/saarku/fig-explorer/tree/master/web-application) for more details about it).
+Finally, we can use the embedding to find for each figure its most semantically related figures. To do this, we first perform a retrieval phase using a tf.idf model and the result is then re-ranked using the embedding-based similarity. The output of this function will be a file that can be used directly in the web-based app (take a look [here](https://github.com/saarku/fig-explorer/tree/master/web-application) for more details about it). To run this function, use the following command:
+```
+python get_related_figures.py
+```
