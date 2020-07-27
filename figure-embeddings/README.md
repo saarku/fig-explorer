@@ -16,7 +16,7 @@ It is currently set up to use the example data set in this repository. The direc
 ## Learning/Inference of Embeddings Model
 Using the data that was generated in the previous step, we can learn an embedding model or use an existing model to generate figure embeddings using the following command:
 ```
-learn_and_predict.py
+python learn_and_predict.py
 ```
 Inside the main function, you can decide what operation should be performed (either learning or inference). 
 
