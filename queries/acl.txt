@@ -1,0 +1,100 @@
+active learning
+anaphora resolution
+aspect based sentiment analysis
+authorship attribution
+bidirectional lstm
+building educational applications
+chinese word segmentation
+conditional random field
+context free grammar
+convolutional neural network
+coreference resolution
+decision tree
+deep learning
+dependency parsing
+discourse structure
+distant supervision
+distributional semantic models
+domain adaptation
+dual decomposition
+dynamic programming
+entity linking
+event extraction
+feature selection
+finite state transducers
+grammatical error detection
+hidden markov models
+information extraction
+information retrieval
+integer linear programming
+keyphrase extraction
+knowledge base
+knowledge base population
+knowledge graph
+knowledge representation
+language acquisition
+large vocabulary continuous speech recognition
+latent dirichlet allocation
+latent semantic analysis
+latent variable
+lexical semantics
+logistic regression
+machine translation
+maximum entropy
+mixture model
+monte carlo
+morphological analysis
+morphological reinflection
+multiword expressions
+named entity recognition
+natural language generation
+natural language interfaces
+natural language understanding
+neural networks
+noun phrase
+open information extraction
+opinion mining
+parallel corpora
+pattern matching
+pos tagging
+prepositional phrase attachment
+question answering
+question generation
+random walks
+reading comprehension
+recurrent neural network
+reinforcement learning
+relation classification
+relation extraction
+semantic relations
+semantic role labeling
+semantic textual similarity
+sentiment analysis
+sequence labeling
+sign language
+slot filling
+social media
+social networks
+speech recognition
+spell checking
+spoken language understanding
+statistical machine translation
+support vector machines
+text categorization
+text classification
+text mining
+text simplification
+textual entailment
+topic modeling
+tree adjoining grammars
+user generated content
+vector space model
+weakly supervised
+web search
+word embeddings
+word representations
+word segmentation
+word sense disambiguation
+word sense induction
+document retrieval
+knowledge acquisition
